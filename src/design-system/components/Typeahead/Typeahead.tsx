@@ -6,21 +6,23 @@ import type { FunctionComponent } from 'react'
 import { STypeahead } from './Typeahead.styled'
 import { Input } from '../Input'
 import { Dropdown } from '../Dropdown'
-import options from './options'
+// import options from './options'
 // hooks
 import useKeyPress from 'design-system/hooks/useKeyPress'
 
 const HIDE_DROPDOWN_DELAY = 200
-// interface TypeaheadProps {
-//   children: JSX.Element[] | JSX.Element
-//   onClick: (event: React.SyntheticEvent) => void
-// }
+interface TypeaheadProps {
+  options: any[]
+  onChange?: (event: React.SyntheticEvent) => void
+  onSelect?: (option: any) => void
+}
 
-const Typeahead: FunctionComponent = () => {
+const Typeahead: FunctionComponent<TypeaheadProps> = ({ options, onChange, onSelect }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const [selectedOptionIndex, setSelectedOptionIndex] = useState(0)
   const arrowUpPressed = useKeyPress('ArrowUp')
   const arrowDownPressed = useKeyPress('ArrowDown')
+  const isEnterPressed = useKeyPress('Enter')
 
   const handleInputFocus = useCallback(() => {
     setIsDropdownOpen(true)
@@ -31,7 +33,7 @@ const Typeahead: FunctionComponent = () => {
       setIsDropdownOpen(false)
     }, HIDE_DROPDOWN_DELAY)
   }, [setIsDropdownOpen])
-  console.log('selectedOptionIndex', selectedOptionIndex)
+
   useEffect(() => {
     if (arrowUpPressed && selectedOptionIndex > 0) {
       setSelectedOptionIndex(selectedOptionIndex - 1)
@@ -39,14 +41,23 @@ const Typeahead: FunctionComponent = () => {
   }, [arrowUpPressed])
 
   useEffect(() => {
+    if (isEnterPressed && options?.length) {
+      handleOptionSelected(options[selectedOptionIndex])
+    }
+  }, [isEnterPressed])
+
+  useEffect(() => {
     if (arrowDownPressed && selectedOptionIndex < options.length - 1) {
       setSelectedOptionIndex(selectedOptionIndex + 1)
     }
   }, [arrowDownPressed])
 
-  const handleOptionSelected = useCallback((option) => {
-    console.log('option', option)
-  }, [])
+  const handleOptionSelected = useCallback(
+    (option) => {
+      onSelect?.(option)
+    },
+    [onSelect]
+  )
 
   return (
     <STypeahead>
@@ -55,6 +66,7 @@ const Typeahead: FunctionComponent = () => {
         label="Choose your beer:"
         onFocus={handleInputFocus}
         onBlur={handleInputBlur}
+        onChange={onChange}
       />
       <Dropdown
         open={isDropdownOpen}

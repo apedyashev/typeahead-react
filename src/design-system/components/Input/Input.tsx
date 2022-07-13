@@ -8,13 +8,20 @@ interface InputProps {
   id: string
   onFocus?: (event: React.SyntheticEvent) => void
   onBlur?: (event: React.SyntheticEvent) => void
+  onChange?: (event: React.SyntheticEvent) => void
   onKeyDown?: (event: React.KeyboardEvent) => void
 }
-const Input: FunctionComponent<InputProps> = ({ id, label, onFocus, onBlur }) => {
+const Input: FunctionComponent<InputProps> = ({ id, label, onFocus, onBlur, onChange }) => {
   return (
     <SInputWrapper>
       {label && <label htmlFor={id}>{label}</label>}
-      <input id={id} aria-labelledby={id} onFocus={onFocus} onBlur={onBlur}></input>
+      <input
+        id={id}
+        aria-labelledby={id}
+        onFocus={onFocus}
+        onBlur={onBlur}
+        onChange={onChange}
+      ></input>
     </SInputWrapper>
   )
 }

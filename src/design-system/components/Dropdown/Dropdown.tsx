@@ -22,7 +22,8 @@ const Dropdown = <TItem,>({
 }: DropdownProps<TItem>) => {
   return (
     <SDropdown open={open}>
-      {options.map((option, i) => {
+      {(!options || !options.length) && <li>No options</li>}
+      {options?.map((option, i) => {
         const isOptionSelected = selectedOptionIndex === i
         if (renderOption) {
           return React.cloneElement(renderOption(option), {

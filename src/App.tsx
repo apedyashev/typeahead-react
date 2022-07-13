@@ -1,8 +1,15 @@
 // components
-import STestScreen from 'screens/Test'
+import { TestPage } from 'pages/Test'
+import { QueryClient, QueryClientProvider } from 'react-query'
+
+const queryClient = new QueryClient()
 
 function App() {
-  return <STestScreen />
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TestPage />
+    </QueryClientProvider>
+  )
 }
 
 export default App
