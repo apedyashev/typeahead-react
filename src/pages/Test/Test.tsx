@@ -1,6 +1,7 @@
 // libs
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
+import debounce from 'lodash/debounce'
 // types
 import type { FunctionComponent } from 'react'
 // components
@@ -18,12 +19,16 @@ const STestScreenWrapper = styled.div`
   }
 `
 
+const DEBOUNCE_QUERY_VALUE_MS = 400
+
 const TestScreen: FunctionComponent = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const { data: beers } = useBeers(searchQuery)
 
+  const debouncedSetSeachQuery = debounce(setSearchQuery, DEBOUNCE_QUERY_VALUE_MS)
+
   const handleTypeaheadChange = useCallback((event) => {
-    setSearchQuery(event.target.value)
+    debouncedSetSeachQuery(event.target.value)
   }, [])
 
   const handleOptionSelect = useCallback(({ image_url }) => {
