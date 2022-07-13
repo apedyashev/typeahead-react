@@ -2,7 +2,7 @@
 import STestScreen from 'screens/Test'
 
 function App() {
-  return <STestScreen>dsd</STestScreen>
+  return <STestScreen />
 }
 
 export default App

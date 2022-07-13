@@ -1,9 +1,13 @@
 // libs
 import styled from 'styled-components'
+// types
+import type { FunctionComponent } from 'react'
+// components
+import { Typeahead } from 'design-system/components/Typeahead'
 // other
 import { breakPoints } from 'design-system/theme'
 
-const STestScreen = styled.div`
+const STestScreenWrapper = styled.div`
   margin: 0 auto;
   width: 100%;
   @media (min-width: ${breakPoints.laptop}px) {
@@ -11,4 +15,12 @@ const STestScreen = styled.div`
   }
 `
 
-export default STestScreen
+const TestScreen: FunctionComponent = () => {
+  return (
+    <STestScreenWrapper>
+      <Typeahead />
+    </STestScreenWrapper>
+  )
+}
+
+export default TestScreen
