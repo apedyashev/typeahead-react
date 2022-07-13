@@ -1,18 +1,52 @@
-// types
-import type { FunctionComponent } from 'react'
+import React from 'react'
 // components
 import { SDropdown } from './Dropdown.styled'
 
-interface DropdownProps {
-  open?: boolean
-  onSelect?: () => void
+interface DefaultItem {
+  id: string | number
+  label: string
 }
-const Dropdown: FunctionComponent<DropdownProps> = ({ open }) => {
+interface DropdownProps<TItem = DefaultItem> {
+  open?: boolean
+  options: TItem[]
+  selectedOptionIndex: number
+  renderOption?: (item: TItem) => JSX.Element
+  onSelect?: (option: TItem) => void
+}
+const Dropdown = <TItem,>({
+  open,
+  options,
+  selectedOptionIndex,
+  renderOption,
+  onSelect,
+}: DropdownProps<TItem>) => {
   return (
     <SDropdown open={open}>
-      <li>1</li>
-      <li>1</li>
-      <li>1</li>
+      {options.map((option, i) => {
+        const isOptionSelected = selectedOptionIndex === i
+        if (renderOption) {
+          return React.cloneElement(renderOption(option), {
+            key: (option as unknown as DefaultItem).id,
+            onClick: () => onSelect?.(option),
+            'aria-selected': isOptionSelected ? 'true' : 'false',
+            role: 'option',
+            tabIndex: 0,
+          })
+        } else {
+          return (
+            <li
+              role="option"
+              aria-selected={isOptionSelected ? 'true' : 'false'}
+              tabIndex={0}
+              key={(option as unknown as DefaultItem).id}
+              onClick={() => onSelect?.(option)}
+              onKeyUp={() => onSelect?.(option)}
+            >
+              {(option as unknown as DefaultItem).label}
+            </li>
+          )
+        }
+      })}
     </SDropdown>
   )
 }

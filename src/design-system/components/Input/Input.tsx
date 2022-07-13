@@ -8,6 +8,7 @@ interface InputProps {
   id: string
   onFocus?: (event: React.SyntheticEvent) => void
   onBlur?: (event: React.SyntheticEvent) => void
+  onKeyDown?: (event: React.KeyboardEvent) => void
 }
 const Input: FunctionComponent<InputProps> = ({ id, label, onFocus, onBlur }) => {
   return (
